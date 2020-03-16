@@ -37,7 +37,44 @@ const store = async (req, res) => {
   return res.json(spot);
 }
 
+const show = async (req, res) => {
+  const { spotId } = req.params;
+
+  try {
+    const spot = await Spot.findById(spotId);
+  
+    return res.status(200).json({ spot });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const update = async (req, res) => {
+  const { spotId } = req.params;
+  const { filename } = req.file;
+  const { company, techs, price } = req.body;
+  const { user_id } = req.headers;
+
+  try {
+    const spot = await Spot.findById(spotId);    
+
+    spot.thumbnail = filename;
+    spot.company = company;
+    spot.techs = techs.split(',').map(tech => tech.trim());
+    spot.price = price;
+    spot.user_id = user_id;
+
+    await spot.save();
+    
+    return res.json({ spot });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   index,
-  store
+  store,
+  show,
+  update
 };

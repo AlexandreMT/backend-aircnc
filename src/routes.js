@@ -14,6 +14,8 @@ const upload = multer(uploadConfig);
 routes.post('/sessions', SessionController.store);
 
 routes.get('/spots', SpotController.index);
+routes.get('/spots/:spotId', SpotController.show);
+routes.put('/spots/:spotId', upload.single('thumbnail'), SpotController.update);
 routes.post('/spots', upload.single('thumbnail'), SpotController.store);
 
 routes.get('/dashboard', DashboardController.show);
